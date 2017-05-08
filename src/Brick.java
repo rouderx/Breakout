@@ -7,6 +7,8 @@ public class Brick {
 
     private int px;
     private int py;
+    private int x;
+    private int y;
     private int w;
     private int h;
 
@@ -17,17 +19,20 @@ public class Brick {
     private final int top = 100;
 
 
-    public Brick(int px, int py, Color color) {
-        this.px = px;
-        this.py = py;
+    public Brick(int x, int y, Color color) {
+        this.x = x;
+        this.y = y;
         this.color = color;
         this.w =100;
         this.h =20;
+        this.px = x*this.w;
+        this.py = (y*this.h)+this.top;
     }
 
     public void paint(Graphics2D g2d) {
+        if(!visible)return;
         g2d.setColor(color);
-        g2d.fillRect(px*w,(py*h)+top,w,h);
+        g2d.fillRect(px,py,w,h);
     }
 
     public int getPx() {
@@ -35,7 +40,7 @@ public class Brick {
     }
 
     public int getPy() {
-        return py*+top;
+        return py;
     }
 
     public int getW() {

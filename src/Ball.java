@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -106,14 +107,37 @@ public class Ball {
         return false;
     }
 
-    public void checkCollision(ArrayList<Brick> bricks) {
-        Ellipse2D el = new Ellipse2D.Double(px,py,radius,radius);
-        Rectangle2D rec = new Rectangle2D.Double(px,py,radius,radius);
-        for(int i = 0; i < bricks.size();i++) {
+    public void checkCollision(ArrayList<Brick> bricks,int speed) {
+        Rectangle2D rec = this.getR2D();
+        for(int i = 0; i < bricks.size();i++){
+            if(!bricks.get(i).getVisibility())return;
             Rectangle2D r2 = new Rectangle2D.Double(bricks.get(i).getPx(),bricks.get(i).getPy(),bricks.get(i).getW(),bricks.get(i).getH());
             if(rec.intersects(r2))
             {
-                System.out.println(i);
+                if(r2.intersectsLine(rec.getX(),rec.getY()+speed,rec.getX(),rec.getY()+rec.getWidth()-speed)) {
+                    deltaX *= -1;
+                    bricks.get(i).setHidden();
+                    System.out.println("lavy");
+                    return;
+                }
+                if(r2.intersectsLine(rec.getX()+speed,rec.getY(),rec.getX()+rec.getWidth()-speed,rec.getY())) {
+                    deltaY *= -1;
+                    bricks.get(i).setHidden();
+                    System.out.println("horny");
+                    return;
+                }
+                if(r2.intersectsLine(rec.getX()+rec.getWidth(),rec.getY()+speed,rec.getX()+rec.getWidth(),rec.getY()+rec.getWidth()-speed)) {
+                    deltaX *= -1;
+                    bricks.get(i).setHidden();
+                    System.out.println("pravy");
+                    return;
+                }
+                if(r2.intersectsLine(rec.getX()+speed,rec.getY()+rec.getWidth(),rec.getX()+rec.getWidth()-speed,rec.getY()+rec.getWidth())) {
+                    deltaY *= -1;
+                    bricks.get(i).setHidden();
+                    System.out.println("dolny");
+                    return;
+                }
             }
         }
     }

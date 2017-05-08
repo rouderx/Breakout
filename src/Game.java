@@ -56,7 +56,7 @@ public class Game extends JPanel{
                     paddleChecker = !ball.checkCollision(paddle,speed);
                 }
                 if(ball.getPy() < 350){
-                    ball.checkCollision(bricks);
+                    ball.checkCollision(bricks,speed);
                     paddleChecker = true;
                 }
                 repaint();
@@ -69,9 +69,7 @@ public class Game extends JPanel{
 
     private void loadBricks() {
         bricks.clear();
-        bricks.add(new Brick(0,0,Color.cyan));
-        bricks.add(new Brick(1,0,Color.GREEN));
-        bricks.add(new Brick(2,0,Color.ORANGE));
+        bricks.add(new Brick(5,0,Color.cyan));
     }
 
     private void gameOver() {
