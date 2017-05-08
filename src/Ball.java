@@ -65,62 +65,43 @@ public class Ball {
     }
 
     public boolean checkCollision(Paddle paddle,int speed) {
-        Ellipse2D el = new Ellipse2D.Double(px,py,radius,radius);
+
         Rectangle2D rc = new Rectangle2D.Double(px,py,radius,radius);
-//        if(el.intersects(paddle.getPx(),paddle.getPy(),paddle.getW(),paddle.getH()))
-//        {
-//            if(py + radius > paddle.getPy() + speed ) {
-//                deltaX*=-1;
-//            } else {
-//                deltaY*=-1;
-//            }
-//        }
+
         if(rc.intersects(paddle.getPx(),paddle.getPy(),paddle.getW(),paddle.getH()))
         {
-            if(this.py > paddle.getPy() + speed) {
+            if(this.py+this.radius > paddle.getPy() + speed) {
                 this.deltaX *= -1;
+                return true;
             } else {
+                double p = 0.0;
                 if((this.px + radius/2) > paddle.getPx() && (this.px + radius/2) < (paddle.getPx()+paddle.getW())) {
-                    double p = this.px + radius/2 - paddle.getPx(); //stedny bod dotyku lopty
-                    double w = paddle.getW();                       //šírka padla
-                    double perc = (p*100)/(w/2);                    //percento zo šírky padla
-                    int n = (deltaX < 0.0) ? -1 : 1;                // nasobic z ktorej strany ide lopta aby pokracovala v smere
-//                    if(deltaX < 0.0) {
-//                        double y = 100.0 - (perc - 100.0);          //vyratam percento pre pravu polovicu padla
-//                        deltaY = y * -0.01;
-//                        double x = 100 - perc;
-//                        deltaX = x * 0.015;
-//                        //System.out.println("y " + y*0.01 + " x " + x * 0.015);
-//                        return true;
-//                    } else if (deltaX > 0.0) {
-//                        deltaY = perc * -0.01;
-//                        double x = 100 - perc;
-//                        deltaX = x * 0.015;
-//                        return true;
-//                    } else {
-                        if((this.px + radius/2) > (paddle.getPx() + paddle.getW()/2))
-                        {
-                            double y = 100.0 - (perc - 100.0);
-                            deltaY = y * -0.01;
-                            double x = 100.0 - y;
-                            deltaX = x * 0.015 * n;
-                            System.out.println("y " + y*-0.01 + " x " + x * 0.015);
-                            return true;
-                        }
-                        deltaY = perc * -0.01;
-                        double x = 100.0 - perc;
-                        n = (deltaX == 0.0) ? -1 : n;
-                        deltaX = x * 0.015 * n;
-                        return true;
-//                    }
-
+                    p = this.px + radius/2 - paddle.getPx(); //stedny bod dotyku lopty
                 } else if(this.px < (double) paddle.getPx()) {
+                    p = this.px + this.radius - paddle.getPx();
+                } else if(this.px + this.radius > (double) (paddle.getPx() + paddle.getW())) {
+                    p = this.px - paddle.getPx();
+                }
+                double w = paddle.getW();                       //šírka padla
+                double perc = (p*100)/(w/2);                    //percento zo šírky padla
+                int n = (deltaX < 0.0) ? -1 : 1;                // nasobic z ktorej strany ide lopta aby pokracovala v smere
+                if((this.px + radius/2) > (paddle.getPx() + paddle.getW()/2))
+                {
+                    double y = 100.0 - (perc - 100.0);
+                    deltaY = y * -0.01;
+                    double x = 100.0 - y;
+                    deltaX = x * 0.015 * n;
+                    //System.out.println("y " + y*-0.01 + " x " + x * 0.015);
+                    return true;
+                } else {
+                    deltaY = perc * -0.01;
+                    double x = 100.0 - perc;
+                    n = (deltaX == 0.0) ? -1 : n;       //ak lopta prichadza kolmo, aby sa odrazila do lavej strany
+                    deltaX = x * 0.015 * n;
+                    return true;
 
                 }
             }
-
-            deltaY*=-1;
-            return true;
         }
         return false;
     }

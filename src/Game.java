@@ -52,8 +52,13 @@ public class Game extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 ball.update(getWidth(),getHeight(),speed);
                 paddle.update(getWidth(),ball.getPx(),ball.getPy(),ball.getRadius(),speed);
-                if(ball.getPy() > 350 && paddleChecker){paddleChecker = !ball.checkCollision(paddle,speed);}
-                if(ball.getPy() < 350){ball.checkCollision(bricks); paddleChecker = true;}
+                if(ball.getPy() > 350 && paddleChecker){
+                    paddleChecker = !ball.checkCollision(paddle,speed);
+                }
+                if(ball.getPy() < 350){
+                    ball.checkCollision(bricks);
+                    paddleChecker = true;
+                }
                 repaint();
                 if(!game){timer.stop();}
             }
@@ -101,4 +106,5 @@ public class Game extends JPanel{
         level++;
         loadBricks();
     }
+
 }
