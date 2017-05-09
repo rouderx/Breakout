@@ -27,7 +27,9 @@ public class Breakout extends JFrame {
                 JFrame frame = new JFrame("Breakout");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setResizable(false);
-                frame.add(new Game());
+                //frame.setUndecorated(true);
+                String name= JOptionPane.showInputDialog("Zadaj svoje meno: ");
+                frame.add(new Game(name));
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);

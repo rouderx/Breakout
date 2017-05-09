@@ -1,9 +1,8 @@
 package Sprites;
 import Game.Game;
+import Game.Player;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -109,7 +108,7 @@ public class Ball {
         return false;
     }
 
-    public void checkCollision(ArrayList<Brick> bricks, int speed) {
+    public void checkCollision(ArrayList<Brick> bricks, int speed, Player player) {
         Rectangle2D rec = this.getR2D();
         for(int i = 0; i < bricks.size();i++){
             if(!bricks.get(i).getVisibility())return;
@@ -119,24 +118,28 @@ public class Ball {
                 if(r2.intersectsLine(rec.getX(),rec.getY()+speed,rec.getX(),rec.getY()+rec.getWidth()-speed)) {
                     deltaX *= -1;
                     bricks.remove(i);
+                    player.setScore(player.getScore()+1);
                     //System.out.println("lavy");
                     break;
                 }
                 if(r2.intersectsLine(rec.getX()+speed,rec.getY(),rec.getX()+rec.getWidth()-speed,rec.getY())) {
                     deltaY *= -1;
                     bricks.remove(i);
+                    player.setScore(player.getScore()+1);
                     //System.out.println("horny");
                     break;
                 }
                 if(r2.intersectsLine(rec.getX()+rec.getWidth(),rec.getY()+speed,rec.getX()+rec.getWidth(),rec.getY()+rec.getWidth()-speed)) {
                     deltaX *= -1;
                     bricks.remove(i);
+                    player.setScore(player.getScore()+1);
                     //System.out.println("pravy");
                     break;
                 }
                 if(r2.intersectsLine(rec.getX()+speed,rec.getY()+rec.getWidth(),rec.getX()+rec.getWidth()-speed,rec.getY()+rec.getWidth())) {
                     deltaY *= -1;
                     bricks.remove(i);
+                    player.setScore(player.getScore()+1);
                     //System.out.println("dolny");
                     break;
                 }

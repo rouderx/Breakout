@@ -26,6 +26,7 @@ public class Game extends JPanel{
     private Ball ball;
     private Paddle paddle;
     private ArrayList<Brick> bricks;
+    private Player player;
 
     private int level = 1;
     private int speed = 5;
@@ -34,12 +35,22 @@ public class Game extends JPanel{
     private Timer timer;
     private boolean paddleChecker = true;
 
-    public Game()
+    public Game(String name)
     {
+        player = new Player(name);
         setBackground(Color.BLACK);
         setFocusable(true);
         setLayout(new GridBagLayout());
+        showMenu();
+    }
 
+    public void initGame() {
+        ball = new Ball();
+        paddle = new Paddle();
+        bricks = new ArrayList<Brick>();
+        loadBricks();
+        game = true;
+        start = true;
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -61,6 +72,17 @@ public class Game extends JPanel{
                             start = false;
                         }
                         break;
+                    case KeyEvent.VK_P:
+                        if(timer.isRunning()) {
+                            timer.stop();
+                            repaint();
+                        } else {
+                            timer.start();
+                        }
+                        break;
+                    default:
+                        System.out.println(e.getKeyCode());
+                        break;
                 }
             }
 
@@ -70,18 +92,7 @@ public class Game extends JPanel{
                 if(start)ball.setDeltaX(0);
             }
         });
-        showMenu();
-    }
-
-    public void initGame() {
-        ball = new Ball();
-        paddle = new Paddle();
-        bricks = new ArrayList<Brick>();
-        loadBricks();
-        game = true;
-        start = true;
-
-        timer = new Timer(16, new ActionListener() {
+        timer = new Timer(13, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ball.update(getWidth(),getHeight(),speed);
@@ -92,7 +103,7 @@ public class Game extends JPanel{
                 }
 
                 if(ball.getPy() < 350){
-                    ball.checkCollision(bricks,speed);
+                    ball.checkCollision(bricks,speed,player);
                     paddleChecker = true;
                 }
 
@@ -100,10 +111,10 @@ public class Game extends JPanel{
                     showMenu();
                     timer.stop();
                 }
-                System.out.println(bricks.size());
+
                 if(bricks.size() == 0){
                     level++;
-                    speed++;
+                    //speed++;
                     start = true;
                     resetPositions();
                     loadBricks();
@@ -142,6 +153,14 @@ public class Game extends JPanel{
             for (Brick brick : bricks) {
                 brick.draw(g2d);
             }
+            g2d.setColor(Color.white);
+            g2d.setFont(new Font("Arial",Font.BOLD,20));
+            g2d.drawString(Integer.toString(player.getScore()),10,20);
+            if(!timer.isRunning()) {
+                g2d.setColor(Color.white);
+                g2d.setFont(new Font("Arial",Font.BOLD,50));
+                g2d.drawString("Pause",400,250);
+            }
         } else {
             BufferedImage img = null;
             try {
@@ -162,7 +181,8 @@ public class Game extends JPanel{
     }
 
     private void showMenu() {
-        Game g = this;
+        JLabel jl = new JLabel("<html>A<br>A<br></html>");
+
         JButton b = new JButton("Start");
         b.setAlignmentY(200);
         b.addActionListener(new ActionListener() {
@@ -182,11 +202,12 @@ public class Game extends JPanel{
             }
         });
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,0,10,0);
-        g.add(b,gbc);
+        gbc.insets = new Insets(10,10,10,10);
+        add(b,gbc);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        g.add(c,gbc);
+        add(c,gbc);
+        gbc.gridx = 1;
         revalidate();
         repaint();
     }
