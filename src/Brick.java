@@ -16,7 +16,7 @@ public class Brick {
 
     private boolean visible = true;
 
-    private final int top = 100;
+    //private final int top = 100;
 
 
     public Brick(int x, int y, Color color) {
@@ -24,9 +24,9 @@ public class Brick {
         this.y = y;
         this.color = color;
         this.w =100;
-        this.h =20;
+        this.h =30;
         this.px = x*this.w;
-        this.py = (y*this.h)+this.top;
+        this.py = y*this.h;
     }
 
     public void paint(Graphics2D g2d) {

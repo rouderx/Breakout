@@ -4,7 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by lukas on 04.05.2017.
@@ -19,7 +25,7 @@ public class Game extends JPanel{
 
     private int level = 1;
     private int speed = 3;
-    private boolean game = false;
+    public static boolean game = false;
     private Timer timer;
 
     private boolean paddleChecker = true;
@@ -61,18 +67,18 @@ public class Game extends JPanel{
                 }
                 repaint();
                 if(!game){timer.stop();}
+                if(bricks.size() == 0){
+                    level++;
+                    //System.out.println(level);
+                    loadBricks();
+                }
             }
         });
         timer.start();
-        gameOver();
+        repaint();
     }
 
-    private void loadBricks() {
-        bricks.clear();
-        bricks.add(new Brick(5,0,Color.cyan));
-    }
-
-    private void gameOver() {
+    private void gameOver(Graphics2D g) {
     }
 
     @Override
@@ -98,11 +104,39 @@ public class Game extends JPanel{
             brick.paint(g2d);
         }
         g2d.dispose();
+        if(!game)gameOver(g2d);
     }
 
     public void increaseLevel() {
         level++;
-        loadBricks();
     }
 
+    private void loadBricks() {
+        bricks.clear();
+        String line = null;
+        try {
+            BufferedReader br=new BufferedReader(new FileReader("src/levels.txt"));
+            while((line=br.readLine())!=null){
+                Pattern p = Pattern.compile(level + "\\[.+\\]");
+                Matcher m = p.matcher(line);
+                if(m.find()) {
+                    break;
+                }
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        line = line.replace(level+"[","");
+        line = line.replace("]","");
+        String[] levels = line.split(";");
+        for(int i = 0; i < levels.length; i++) {
+            levels[i] = levels[i].replace("{","");
+            levels[i] = levels[i].replace("}","");
+            String[] brick = levels[i].split(",");
+            bricks.add(new Brick(Integer.parseInt(brick[0]),Integer.parseInt(brick[1]),new Color(Integer.parseInt(brick[2]),Integer.parseInt(brick[3]),Integer.parseInt(brick[4]))));
+        }
+    }
 }

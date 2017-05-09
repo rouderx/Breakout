@@ -45,7 +45,8 @@ public class Ball {
         }
         if (py + radius >= height) {
             py = height - radius;
-            deltaY *= -1;
+            Game.game = false;
+            //deltaY *= -1;
         } else if (py < 0) {
             py = 0;
             deltaY *= -1;
@@ -100,7 +101,6 @@ public class Ball {
                     n = (deltaX == 0.0) ? -1 : n;       //ak lopta prichadza kolmo, aby sa odrazila do lavej strany
                     deltaX = x * 0.015 * n;
                     return true;
-
                 }
             }
         }
@@ -116,25 +116,29 @@ public class Ball {
             {
                 if(r2.intersectsLine(rec.getX(),rec.getY()+speed,rec.getX(),rec.getY()+rec.getWidth()-speed)) {
                     deltaX *= -1;
-                    bricks.get(i).setHidden();
+                    //bricks.get(i).setHidden();
+                    bricks.remove(i);
                     System.out.println("lavy");
                     return;
                 }
                 if(r2.intersectsLine(rec.getX()+speed,rec.getY(),rec.getX()+rec.getWidth()-speed,rec.getY())) {
                     deltaY *= -1;
-                    bricks.get(i).setHidden();
+                    //bricks.get(i).setHidden();
+                    bricks.remove(i);
                     System.out.println("horny");
                     return;
                 }
                 if(r2.intersectsLine(rec.getX()+rec.getWidth(),rec.getY()+speed,rec.getX()+rec.getWidth(),rec.getY()+rec.getWidth()-speed)) {
                     deltaX *= -1;
-                    bricks.get(i).setHidden();
+                    //bricks.get(i).setHidden();
+                    bricks.remove(i);
                     System.out.println("pravy");
                     return;
                 }
                 if(r2.intersectsLine(rec.getX()+speed,rec.getY()+rec.getWidth(),rec.getX()+rec.getWidth()-speed,rec.getY()+rec.getWidth())) {
                     deltaY *= -1;
-                    bricks.get(i).setHidden();
+                    //bricks.get(i).setHidden();
+                    bricks.remove(i);
                     System.out.println("dolny");
                     return;
                 }
