@@ -78,7 +78,7 @@ public class Ball {
             } else {
                 double p = 0.0;
                 if((this.px + radius/2) > paddle.getPx() && (this.px + radius/2) < (paddle.getPx()+paddle.getW())) {
-                    p = this.px + radius/2 - paddle.getPx(); //stedny bod dotyku lopty
+                    p = this.px + radius/2 - paddle.getPx(); //stredny bod dotyku lopty
                 } else if(this.px < (double) paddle.getPx()) {
                     p = this.px + this.radius - paddle.getPx();
                 } else if(this.px + this.radius > (double) (paddle.getPx() + paddle.getW())) {
@@ -86,22 +86,30 @@ public class Ball {
                 }
                 double w = paddle.getW();                       //šírka padla
                 double perc = (p*100)/(w/2);                    //percento zo šírky padla
-                int n = (deltaX < 0.0) ? -1 : 1;                // nasobic z ktorej strany ide lopta aby pokracovala v smere
-                if((this.px + radius/2) > (paddle.getPx() + paddle.getW()/2))
-                {
-                    double y = 100.0 - (perc - 100.0);
-                    deltaY = y * -0.01;
-                    double x = 100.0 - y;
-                    deltaX = x * 0.015 * n;
-                    //System.out.println("y " + y*-0.01 + " x " + x * 0.015);
-                    return true;
+                int n = 1;                //nasobic z ktorej strany ide lopta aby pokracovala v smere
+//                if((this.px + this.radius/2) > (paddle.getPx() + paddle.getW()/2))
+//                {
+//                    double y = 100.0 - (perc - 100.0);
+//                    deltaY = y * -0.01;
+//                    double x = 100.0 - y;
+//                    deltaX = x * 0.01 * n;
+//                    return true;
+//                } else {
+//                    deltaY = perc * -0.01;
+//                    double x = 100.0 - perc;
+//                    n = (deltaX == 0.0) ? -1 : n;       //ak lopta prichadza kolmo, aby sa odrazila do lavej strany
+//                    deltaX = x * 0.01 * n;
+//                    return true;
+//                }
+                if((this.px + this.radius/2) > (paddle.getPx() + paddle.getW()/2)) {
+                    perc = 100.0 - (perc - 100.0);
                 } else {
-                    deltaY = perc * -0.01;
-                    double x = 100.0 - perc;
-                    n = (deltaX == 0.0) ? -1 : n;       //ak lopta prichadza kolmo, aby sa odrazila do lavej strany
-                    deltaX = x * 0.015 * n;
-                    return true;
+                    n = -1;
                 }
+                deltaY = perc * -0.01;
+                double x = 100.0 - perc;
+                deltaX = x * 0.01 * n;
+                return true;
             }
         }
         return false;
@@ -118,28 +126,28 @@ public class Ball {
                     deltaX *= -1;
                     //bricks.get(i).setHidden();
                     bricks.remove(i);
-                    System.out.println("lavy");
+                    //System.out.println("lavy");
                     return;
                 }
                 if(r2.intersectsLine(rec.getX()+speed,rec.getY(),rec.getX()+rec.getWidth()-speed,rec.getY())) {
                     deltaY *= -1;
                     //bricks.get(i).setHidden();
                     bricks.remove(i);
-                    System.out.println("horny");
+                    //System.out.println("horny");
                     return;
                 }
                 if(r2.intersectsLine(rec.getX()+rec.getWidth(),rec.getY()+speed,rec.getX()+rec.getWidth(),rec.getY()+rec.getWidth()-speed)) {
                     deltaX *= -1;
                     //bricks.get(i).setHidden();
                     bricks.remove(i);
-                    System.out.println("pravy");
+                    //System.out.println("pravy");
                     return;
                 }
                 if(r2.intersectsLine(rec.getX()+speed,rec.getY()+rec.getWidth(),rec.getX()+rec.getWidth()-speed,rec.getY()+rec.getWidth())) {
                     deltaY *= -1;
                     //bricks.get(i).setHidden();
                     bricks.remove(i);
-                    System.out.println("dolny");
+                    //System.out.println("dolny");
                     return;
                 }
             }

@@ -46,13 +46,14 @@ public class Paddle{
     }
 
     public void update(int width, double bx, double by, double r, int speed) {
-        if((by+r >= py && (bx+r < px || bx > px+w)) || (by <= py+h && (bx+r < px || bx > px+w))){
-            //if(bx+r < px || bx > px+w) {
-                px += (speed+1) * deltaX;
-            //}
+        if(by + r >= py && by <= py + h) {
+            if(bx + r + speed < px || bx - speed > px+w) {
+                px += speed * deltaX;
+            }
         } else {
             px += speed * deltaX;
         }
+
         if (px + w >= width) {
             px = width - w;
         } else if (px < 0) {

@@ -22,7 +22,7 @@ public class Breakout extends JFrame {
                     ex.printStackTrace();
                 }
 
-                JFrame frame = new JFrame("Testing");
+                JFrame frame = new JFrame("Breakout");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setResizable(false);
                 frame.add(new Game());

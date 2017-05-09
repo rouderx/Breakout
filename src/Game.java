@@ -24,7 +24,7 @@ public class Game extends JPanel{
     private ArrayList<Brick> bricks;
 
     private int level = 1;
-    private int speed = 3;
+    private int speed = 5;
     public static boolean game = false;
     private Timer timer;
 
@@ -60,6 +60,7 @@ public class Game extends JPanel{
                 paddle.update(getWidth(),ball.getPx(),ball.getPy(),ball.getRadius(),speed);
                 if(ball.getPy() > 350 && paddleChecker){
                     paddleChecker = !ball.checkCollision(paddle,speed);
+                    if(ball.getPy()+speed > 450)paddleChecker = true;
                 }
                 if(ball.getPy() < 350){
                     ball.checkCollision(bricks,speed);
