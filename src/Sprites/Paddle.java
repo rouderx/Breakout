@@ -1,8 +1,6 @@
 package Sprites;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Created by lukas on 04.05.2017.
@@ -29,22 +27,6 @@ public class Paddle{
     public void draw(Graphics2D g2d) {
         g2d.setColor(color);
         g2d.fillRect(px,py,w,h);
-    }
-
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_LEFT) {
-            deltaX = -1;
-        }
-
-        if (key == KeyEvent.VK_RIGHT) {
-            deltaX = 1;
-        }
-    }
-
-    public void keyReleased(KeyEvent e) {
-        deltaX = 0;
     }
 
     public void update(int width, double bx, double by, double r, int speed) {

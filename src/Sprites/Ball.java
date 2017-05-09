@@ -111,7 +111,6 @@ public class Ball {
     public void checkCollision(ArrayList<Brick> bricks, int speed, Player player) {
         Rectangle2D rec = this.getR2D();
         for(int i = 0; i < bricks.size();i++){
-            if(!bricks.get(i).getVisibility())return;
             Rectangle2D r2 = new Rectangle2D.Double(bricks.get(i).getPx(),bricks.get(i).getPy(),bricks.get(i).getW(),bricks.get(i).getH());
             if(rec.intersects(r2))
             {

@@ -1,13 +1,16 @@
 package Game;
 
+import java.io.Serializable;
+
 /**
  * Created by lukas on 09.05.2017.
  */
-public class Player {
+public class Player implements Serializable{
     private int score;
     private String name;
 
     public Player(String name) {
+        if(name.isEmpty())name="Fantom";
         this.name = name;
         this.score = 0;
     }
