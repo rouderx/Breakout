@@ -1,3 +1,5 @@
+import Game.Game;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,4 +38,6 @@ public class Breakout extends JFrame {
     public static void main(String[] args) {
         new Breakout();
     }
+
+
 }
