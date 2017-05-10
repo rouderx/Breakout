@@ -166,9 +166,15 @@ public class Game extends JPanel{
             float alpha = 0.5f;
             g2d.setColor(new Color(0,0,0,alpha));
             g2d.fillRect(0,0,800,500);
-            g2d.setColor(Color.white);
-            g2d.setFont(new Font("Arial",Font.BOLD,20));
-            g2d.drawString("GAME OVER",300,200);
+            try {
+                BufferedImage img = ImageIO.read(new File("src/Resources/gameover.png"));
+                int w = img.getWidth(null);
+                int x = (this.getWidth()-w)/2;
+                g2d.drawImage(img, x, 50, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            drawScore(g2d,500,250);
         }
         if(game) {
             ball.draw(g2d);
@@ -176,26 +182,95 @@ public class Game extends JPanel{
             for (Brick brick : bricks) {
                 brick.draw(g2d);
             }
-            g2d.setColor(Color.white);
-            g2d.setFont(new Font("Arial",Font.BOLD,20));
-            g2d.drawString(Integer.toString(player.getScore()),10,20);
+            drawScore(g2d,800,10);
             if(!timer.isRunning()) {
-                g2d.setColor(Color.white);
-                g2d.setFont(new Font("Arial",Font.BOLD,50));
-                g2d.drawString("Pause",400,250);
+                try {
+                    BufferedImage img = ImageIO.read(new File("src/Resources/pause.png"));
+                    int w = img.getWidth(null);
+                    int x = (this.getWidth()-w)/2;
+                    g2d.drawImage(img, x, 100, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else if(!gameOver){
             BufferedImage img = null;
             try {
-                img = ImageIO.read(new File("src/Resources/Breakout.png"));
+                img = ImageIO.read(new File("src/Resources/Logo.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             int w = img.getWidth(null);
             int x = (this.getWidth()-w)/2;
-            g2d.drawImage(img, x, 0, null);
+            g2d.drawImage(img, x, x, null);
         }
         g2d.dispose();
+    }
+
+    private void drawScore(Graphics2D g2d,int width, int top) {
+        int pom = player.getScore();
+        int x = width-25;
+        try {
+            BufferedImage img = ImageIO.read(new File("src/Resources/numbers.png"));
+            if(pom == 0) {
+                BufferedImage nula = img.getSubimage(0, 0, 17, img.getHeight());
+                g2d.drawImage(nula,x,top,null);
+            }
+            int pozX = 0;
+            while(pom != 0)
+            {
+                int mod = pom % 10;
+                pom /= 10;
+                switch (mod) {
+                    case 0:
+                        BufferedImage nula = img.getSubimage(0, 0, 17, img.getHeight());
+                        g2d.drawImage(nula,x-10-(pozX*25),top,null);
+                        break;
+                    case 1:
+                        BufferedImage jedna = img.getSubimage(20, 0, 9, img.getHeight());
+                        g2d.drawImage(jedna,x-5-(pozX*25),top,null);
+                        break;
+                    case 2:
+                        BufferedImage dva = img.getSubimage(32, 0, 18, img.getHeight());
+                        g2d.drawImage(dva,x-10-(pozX*25),top,null);
+                        break;
+                    case 3:
+                        BufferedImage tri = img.getSubimage(53, 0, 13, img.getHeight());
+                        g2d.drawImage(tri,x-10-(pozX*25),top,null);
+                        break;
+                    case 4:
+                        BufferedImage styri = img.getSubimage(69, 0, 17, img.getHeight());
+                        g2d.drawImage(styri,x-10-(pozX*25),top,null);
+                        break;
+                    case 5:
+                        BufferedImage pat = img.getSubimage(89, 0, 18, img.getHeight());
+                        g2d.drawImage(pat,x-10-(pozX*25),top,null);
+                        break;
+                    case 6:
+                        BufferedImage sest = img.getSubimage(110, 0, 17, img.getHeight());
+                        g2d.drawImage(sest,x-10-(pozX*25),top,null);
+                        break;
+                    case 7:
+                        BufferedImage sedem = img.getSubimage(130, 0, 13, img.getHeight());
+                        g2d.drawImage(sedem,x-10-(pozX*25),top,null);
+                        break;
+                    case 8:
+                        BufferedImage osem = img.getSubimage(146, 0, 18, img.getHeight());
+                        g2d.drawImage(osem,x-10-(pozX*25),top,null);
+                        break;
+                    case 9:
+                        BufferedImage devat = img.getSubimage(167, 0, 17, img.getHeight());
+                        g2d.drawImage(devat,x-10-(pozX*25),top,null);
+                        break;
+                    default:
+                        break;
+                }
+                pozX++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void gameOver() {
@@ -210,7 +285,16 @@ public class Game extends JPanel{
             if(topPlayers.size()>1)sortPlayers();
         }
         JButton st = getStatButton();
-        JButton home = new JButton("Home");
+        JButton home = new JButton();
+        setButtonThings(home,"Späť na menu :|");
+        try{
+            Image img3  = ImageIO.read(getClass().getResource("/Resources/button_home.png"));
+            Image img4  = ImageIO.read(getClass().getResource("/Resources/button_home_hover.png"));
+            home.setIcon(new ImageIcon(img3));
+            home.setRolloverIcon(new ImageIcon(img4));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         home.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -221,16 +305,26 @@ public class Game extends JPanel{
             }
         });
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,0,10,0);
+        gbc.insets = new Insets(300,0,10,10);
         add(st,gbc);
-        gbc.insets = new Insets(10,0,10,0);
-        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.insets = new Insets(300,10,10,0);
+        gbc.gridy = 0;
         add(home,gbc);
         revalidate();
     }
 
     private JButton getStatButton() {
-        JButton stat = new JButton("Top players");
+        JButton stat = new JButton();
+        setButtonThings(stat,"Zobrazenie najlepších 5 hráčov :D");
+        try{
+            Image img3  = ImageIO.read(getClass().getResource("/Resources/button_top.png"));
+            Image img4  = ImageIO.read(getClass().getResource("/Resources/button_top_hover.png"));
+            stat.setIcon(new ImageIcon(img3));
+            stat.setRolloverIcon(new ImageIcon(img4));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         stat.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,9 +357,12 @@ public class Game extends JPanel{
     }
 
     private void showMenu() {
-        JButton b = new JButton("Start");
-        b.setAlignmentY(200);
-        b.addActionListener(new ActionListener() {
+        player.setScore(0);
+        JButton start = new JButton();
+        setButtonThings(start,"Klikni pre spustenie hry :)");
+
+        start.setAlignmentY(200);
+        start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeAll();
@@ -274,9 +371,25 @@ public class Game extends JPanel{
                 initGame();
             }
         });
+
         JButton stat = getStatButton();
-        JButton c = new JButton("Close");
-        c.addActionListener(new ActionListener() {
+
+        JButton close = new JButton();
+        setButtonThings(close,"Ukončenie aplikácie :(");
+
+        try {
+            Image img  = ImageIO.read(getClass().getResource("/Resources/button_start.png"));
+            Image img2  = ImageIO.read(getClass().getResource("/Resources/button_start_hover.png"));
+            start.setIcon(new ImageIcon(img));
+            start.setRolloverIcon(new ImageIcon(img2));
+            Image img5  = ImageIO.read(getClass().getResource("/Resources/button_exit.png"));
+            Image img6  = ImageIO.read(getClass().getResource("/Resources/button_exit_hover.png"));
+            close.setIcon(new ImageIcon(img5));
+            close.setRolloverIcon(new ImageIcon(img6));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        close.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveStats();
@@ -284,16 +397,25 @@ public class Game extends JPanel{
             }
         });
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(100,0,10,0);
-        add(b,gbc);
+        gbc.insets = new Insets(120,0,10,0);
+        add(start,gbc);
         gbc.insets = new Insets(10,0,10,0);
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(stat,gbc);
         gbc.gridy = 2;
-        add(c,gbc);
+        add(close,gbc);
         revalidate();
         repaint();
+    }
+
+    private void setButtonThings(JButton b,String s) {
+        b.setBorderPainted(false);
+        b.setContentAreaFilled(false);
+        b.setFocusPainted(false);
+        b.setOpaque(false);
+        b.setToolTipText(s);
+        b.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     private void loadBricks() {
